@@ -21,11 +21,11 @@ app.post('/users', async (req,res) => {
     const hashedPassword = await bcrypt.hash(req.body.password, 10)
     const user = {name:req.body.name, password: hashedPassword}
     users.push(user)
-    //res.status(201).send('Usuario creado exitosamente')
+    res.status(201).send('Usuario creado exitosamente')
 
-    const token = jwt.sign({name: user.name},'mytoken',{expiresIn: 60 * 60 * 24})
+    //const token = jwt.sign({name: user.name},'mytoken',{expiresIn: 60 * 60 * 24})
 
-    res.status(201).json({msg:'Usuario creado exitosamente', token:token})
+    //res.status(201).json({msg:'Usuario creado exitosamente', token:token})
 
   } catch {
     res.status(500).send()
@@ -39,7 +39,11 @@ app.post('/users/login', async (req,res) => {
   }
   try {
     if(await bcrypt.compare(req.body.password, user.password)){
-      res.send('Logeado exitosamente')
+      //res.send('Logeado exitosamente')
+
+    const token = jwt.sign({name: user.name},'mytoken',{expiresIn: 60 * 60 * 24})
+    res.status(201).json({msg:'Usuario logeado exitosamente', token:token})
+
     } else {
       res.send('contraseña incorrecta')
     }
